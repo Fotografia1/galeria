@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111111">
+  <meta name="description" content="Fotografia de rua, momentos reais e instantes da vida.">
+  <title>Minha Galeria Fotográfica</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #111;
+      color: #f5f5f5;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      padding: 42px 20px 28px;
+      text-align: center;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(28px, 5vw, 48px);
+      letter-spacing: 2px;
+    }
+    header p { color: #aaa; }
+    main {
+      max-width: 1400px;
+      margin: auto;
+      padding: 12px;
+    }
+    .galeria {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+    .galeria img {
+      display: block;
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      background: #222;
+      cursor: pointer;
+      transition: opacity .2s;
+    }
+    .galeria img:hover { opacity: .85; }
+    footer {
+      padding: 35px 15px;
+      text-align: center;
+      color: #888;
+      font-size: 13px;
+    }
+    #visualizador {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.94);
+      z-index: 10;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    #visualizador.aberto { display: flex; }
+    #visualizador img {
+      max-width: 100%;
+      max-height: 90vh;
+      object-fit: contain;
+    }
+    #fechar {
+      position: absolute;
+      top: 15px;
+      right: 22px;
+      font-size: 36px;
+      color: white;
+      cursor: pointer;
+      background: none;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MINHA GALERIA</h1>
+    <p>Fotografia · Instantes da vida</p>
+  </header>
+
+  <main>
+    <div class="galeria" id="galeria"></div>
+  </main>
+
+  <div id="visualizador">
+    <button id="fechar" aria-label="Fechar">&times;</button>
+    <img id="fotoGrande" alt="Fotografia ampliada">
+  </div>
+
+  <footer>Fotografia autoral · Todos os direitos reservados</footer>
+
+  <script>
+    const fotos = [
+      "104298.jpg",
+      "139689.jpg",
+      "139691.jpg",
+      "142179.jpg",
+      "142903.png",
+      "142904.png",
+      "142905.png",
+      "142927.jpg",
+      "143172.jpg",
+      "143298.jpg",
+      "file_000000000fa881f4905ce4f7666c4d99.png",
+      "file_000000003844820db97ba4912d53fefb.png",
+      "file_00000000bc5c82469ce83ee61104cec0.png"
+    ];
+
+    const galeria = document.getElementById("galeria");
+    const visualizador = document.getElementById("visualizador");
+    const fotoGrande = document.getElementById("fotoGrande");
+
+    fotos.forEach(nome => {
+      const img = document.createElement("img");
+      img.src = "fotos/" + nome;
+      img.alt = "Fotografia autoral";
+      img.loading = "lazy";
+      img.onclick = () => {
+        fotoGrande.src = img.src;
+        visualizador.classList.add("aberto");
+      };
+      img.onerror = () => img.remove();
+      galeria.appendChild(img);
+    });
+
+    document.getElementById("fechar").onclick = () =>
+      visualizador.classList.remove("aberto");
+
+    visualizador.onclick = evento => {
+      if (evento.target === visualizador) {
+        visualizador.classList.remove("aberto");
+      }
+    };
+  </script>
+</body>
+</html>
