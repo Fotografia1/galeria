@@ -5,121 +5,341 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="Fotografia de rua, momentos reais e instantes da vida.">
-  <title>Minha Galeria Fotográfica</title>
+  <meta name="description" content="Fotografia de rua, pessoas e momentos espontâneos da vida.">
+  <title>Minha Galeria — Fotografia</title>
 
   <style>
     * {
       box-sizing: border-box;
     }
 
+    :root {
+      --fundo: #ffffff;
+      --texto: #171717;
+      --suave: #777777;
+      --linha: #e9e9e9;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
-      background: #fff;
-      color: #111;
-      font-family: Arial, sans-serif;
+      background: var(--fundo);
+      color: var(--texto);
+      font-family: Arial, Helvetica, sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
 
-    header {
-      padding: 42px 20px 28px;
-      text-align: center;
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
-    h1 {
-      margin: 0 0 12px;
-      font-size: clamp(28px, 5vw, 48px);
+    .topo {
+      max-width: 1500px;
+      margin: auto;
+      padding: 28px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--linha);
+    }
+
+    .marca {
+      font-size: 13px;
+      font-weight: 700;
       letter-spacing: 2px;
     }
 
-    header p {
-      color: #aaa;
+    .navegacao {
+      display: flex;
+      gap: 24px;
+      font-size: 12px;
+      color: var(--suave);
     }
 
-    main {
-      max-width: 1400px;
+    .navegacao a:hover {
+      color: var(--texto);
+    }
+
+    .apresentacao {
+      max-width: 1500px;
       margin: auto;
-      padding: 12px;
+      padding: 100px 5% 70px;
+    }
+
+    .etiqueta {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--suave);
+      margin-bottom: 25px;
+    }
+
+    h1 {
+      max-width: 850px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(42px, 7vw, 88px);
+      font-weight: 400;
+      line-height: 1.04;
+      letter-spacing: -2px;
+    }
+
+    .descricao {
+      max-width: 460px;
+      margin: 28px 0 0;
+      font-size: 14px;
+      line-height: 1.9;
+      color: var(--suave);
+    }
+
+    .galeria-area {
+      max-width: 1500px;
+      margin: auto;
+      padding: 0 5% 90px;
+    }
+
+    .galeria-cabecalho {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 0 20px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--linha);
+    }
+
+    .galeria-cabecalho h2 {
+      margin: 0;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .contador {
+      font-size: 12px;
+      color: var(--suave);
     }
 
     .galeria {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 42px 22px;
+      align-items: start;
     }
 
-    .galeria img {
+    .foto {
+      margin: 0;
+      min-width: 0;
+    }
+
+    .foto:nth-child(3n + 2) {
+      margin-top: 55px;
+    }
+
+    .foto-botao {
+      display: block;
+      position: relative;
+      width: 100%;
+      padding: 0;
+      overflow: hidden;
+      border: 0;
+      background: #f3f3f3;
+      cursor: zoom-in;
+    }
+
+    .foto img {
       display: block;
       width: 100%;
-      height: 320px;
-      object-fit: cover;
-      background: #fff;
-      cursor: pointer;
-      transition: opacity .2s;
+      height: auto;
+      max-height: 720px;
+      object-fit: contain;
+      transition: transform .5s ease;
     }
 
-    .galeria img:hover {
-      opacity: .85;
+    .foto-botao:hover img {
+      transform: scale(1.025);
+    }
+
+    .legenda {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 13px;
+      font-size: 11px;
+      color: var(--suave);
+    }
+
+    .legenda span:first-child {
+      color: var(--texto);
+      letter-spacing: .4px;
+    }
+
+    .vazio {
+      display: none;
+      padding: 35px 0;
+      color: var(--suave);
+      font-size: 14px;
     }
 
     footer {
-      padding: 35px 15px;
-      text-align: center;
-      color: #888;
-      font-size: 13px;
+      border-top: 1px solid var(--linha);
+      padding: 35px 5%;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      font-size: 11px;
+      color: var(--suave);
     }
 
     #visualizador {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, .94);
-      z-index: 10;
+      z-index: 100;
+      background: rgba(15, 15, 15, .97);
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 55px 20px;
     }
 
     #visualizador.aberto {
       display: flex;
     }
 
-    #visualizador img {
+    #fotoGrande {
+      display: block;
       max-width: 100%;
-      max-height: 90vh;
+      max-height: 85vh;
+      width: auto;
+      height: auto;
       object-fit: contain;
     }
 
     #fechar {
       position: absolute;
-      top: 15px;
+      top: 12px;
       right: 22px;
-      font-size: 36px;
       color: white;
-      cursor: pointer;
-      background: none;
+      font-size: 38px;
       border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      .topo {
+        padding: 22px 5%;
+      }
+
+      .marca {
+        font-size: 11px;
+        letter-spacing: 1.3px;
+      }
+
+      .navegacao {
+        gap: 14px;
+        font-size: 11px;
+      }
+
+      .apresentacao {
+        padding-top: 70px;
+        padding-bottom: 48px;
+      }
+
+      h1 {
+        letter-spacing: -1.5px;
+      }
+
+      .descricao {
+        font-size: 13px;
+      }
+
+      .galeria {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .foto:nth-child(3n + 2) {
+        margin-top: 0;
+      }
+
+      .galeria-area {
+        padding-bottom: 60px;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *, *::before, *::after {
+        transition: none !important;
+      }
     }
   </style>
 </head>
 
 <body>
-  <header>
-    <h1>MINHA GALERIA</h1>
-    <p>Fotografia · Instantes da vida</p>
+  <header class="topo">
+    <a class="marca" href="#">FOTOGRAFIA AUTORAL</a>
+
+    <nav class="navegacao" aria-label="Navegação principal">
+      <a href="#galeria">Galeria</a>
+      <a href="#sobre">Sobre</a>
+    </nav>
   </header>
 
   <main>
-    <div class="galeria" id="galeria"></div>
+    <section class="apresentacao" id="sobre">
+      <div class="etiqueta">Fotografia de rua · Momentos reais</div>
+
+      <h1>A beleza está nos instantes que passam despercebidos.</h1>
+
+      <p class="descricao">
+        Um olhar sobre a vida cotidiana, as pessoas e os pequenos
+        momentos que tornam cada instante único.
+      </p>
+    </section>
+
+    <section class="galeria-area" id="galeria">
+      <div class="galeria-cabecalho">
+        <h2>Fotografias selecionadas</h2>
+        <span class="contador" id="contador"></span>
+      </div>
+
+      <div class="galeria" id="listaFotos"></div>
+      <p class="vazio" id="mensagemVazia">
+        Não foi possível carregar as fotografias.
+      </p>
+    </section>
   </main>
 
-  <div id="visualizador">
-    <button id="fechar" aria-label="Fechar">&times;</button>
+  <footer>
+    <span>Fotografia autoral · Todos os direitos reservados</span>
+    <a href="#topo" onclick="window.scrollTo(0, 0); return false;">
+      Voltar ao início ↑
+    </a>
+  </footer>
+
+  <div
+    id="visualizador"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Fotografia ampliada"
+  >
+    <button id="fechar" aria-label="Fechar fotografia">&times;</button>
     <img id="fotoGrande" alt="Fotografia ampliada">
   </div>
-
-  <footer>
-    Fotografia autoral · Todos os direitos reservados
-  </footer>
 
   <script>
     const fotos = [
@@ -128,46 +348,84 @@
       "DSC_0719.jpg"
     ];
 
-    const galeria = document.getElementById("galeria");
+    const listaFotos = document.getElementById("listaFotos");
+    const contador = document.getElementById("contador");
     const visualizador = document.getElementById("visualizador");
     const fotoGrande = document.getElementById("fotoGrande");
+    const mensagemVazia = document.getElementById("mensagemVazia");
 
-    fotos.forEach(nome => {
+    let carregadas = 0;
+    let erros = 0;
+
+    contador.textContent = String(fotos.length).padStart(2, "0");
+
+    function fecharFoto() {
+      visualizador.classList.remove("aberto");
+      fotoGrande.removeAttribute("src");
+      document.body.style.overflow = "";
+    }
+
+    fotos.forEach((nome, indice) => {
+      const figura = document.createElement("figure");
+      figura.className = "foto";
+
+      const botao = document.createElement("button");
+      botao.className = "foto-botao";
+      botao.type = "button";
+      botao.setAttribute("aria-label", "Ampliar fotografia " + (indice + 1));
+
       const img = document.createElement("img");
-
       img.src = "fotos/" + nome;
-      img.alt = "Fotografia autoral";
-      img.loading = "lazy";
+      img.alt = "Fotografia autoral " + (indice + 1);
+      img.loading = indice === 0 ? "eager" : "lazy";
+      img.decoding = "async";
 
-      img.onclick = () => {
-        fotoGrande.src = img.src;
-        visualizador.classList.add("aberto");
+      const legenda = document.createElement("figcaption");
+      legenda.className = "legenda";
+
+      const titulo = document.createElement("span");
+      titulo.textContent = "Fotografia " + String(indice + 1).padStart(2, "0");
+
+      const numero = document.createElement("span");
+      numero.textContent = "IMG. " + String(indice + 1).padStart(2, "0");
+
+      legenda.append(titulo, numero);
+      botao.appendChild(img);
+      figura.append(botao, legenda);
+      listaFotos.appendChild(figura);
+
+      img.onload = () => {
+        carregadas++;
       };
 
       img.onerror = () => {
-        console.error("Não foi possível carregar a foto:", nome);
-        img.remove();
+        erros++;
+        figura.remove();
+
+        if (listaFotos.children.length === 0) {
+          mensagemVazia.style.display = "block";
+        }
       };
 
-      galeria.appendChild(img);
+      botao.addEventListener("click", () => {
+        fotoGrande.src = img.src;
+        fotoGrande.alt = img.alt;
+        visualizador.classList.add("aberto");
+        document.body.style.overflow = "hidden";
+      });
     });
 
-    document.getElementById("fechar").onclick = () => {
-      visualizador.classList.remove("aberto");
-      fotoGrande.src = "";
-    };
+    document.getElementById("fechar").addEventListener("click", fecharFoto);
 
-    visualizador.onclick = evento => {
+    visualizador.addEventListener("click", evento => {
       if (evento.target === visualizador) {
-        visualizador.classList.remove("aberto");
-        fotoGrande.src = "";
+        fecharFoto();
       }
-    };
+    });
 
     document.addEventListener("keydown", evento => {
       if (evento.key === "Escape") {
-        visualizador.classList.remove("aberto");
-        fotoGrande.src = "";
+        fecharFoto();
       }
     });
   </script>
