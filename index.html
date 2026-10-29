@@ -21,7 +21,9 @@
       --accent: #a49681;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     html {
       scroll-behavior: smooth;
@@ -35,8 +37,14 @@
       font-family: "DM Sans", sans-serif;
     }
 
-    a { color: inherit; text-decoration: none; }
-    button { font: inherit; }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
 
     .wrap {
       width: min(1380px, 90%);
@@ -80,8 +88,13 @@
       text-transform: uppercase;
     }
 
-    nav a { transition: opacity .2s; }
-    nav a:hover { opacity: .55; }
+    nav a {
+      transition: opacity .2s;
+    }
+
+    nav a:hover {
+      opacity: .55;
+    }
 
     .hero {
       min-height: 690px;
@@ -122,7 +135,10 @@
       letter-spacing: -.045em;
     }
 
-    h1 em { color: #827563; font-weight: 400; }
+    h1 em {
+      color: #827563;
+      font-weight: 400;
+    }
 
     .intro {
       max-width: 440px;
@@ -149,35 +165,39 @@
       color: white;
     }
 
-    .cta span { font-size: 18px; }
+    .cta span {
+      font-size: 18px;
+    }
 
     .hero-visual {
       position: relative;
       width: 100%;
-      max-width: 540px;
+      max-width: 600px;
       justify-self: end;
-      padding: 0 20px 24px 0;
+      padding: 0 16px 20px 0;
     }
 
+    /* Foto de abertura: preserva a imagem completa. */
     .hero-photo {
       display: block;
       width: 100%;
-      height: clamp(390px, 48vw, 590px);
-      object-fit: cover;
-      background: #e9e5de;
+      height: auto;
+      max-height: 600px;
+      object-fit: contain;
+      background: transparent;
     }
 
     .photo-frame {
       position: absolute;
-      inset: -15px 5px 8px 15px;
+      inset: -12px 3px 5px 12px;
       border: 1px solid #c8c0b4;
       pointer-events: none;
     }
 
     .photo-caption {
       position: absolute;
-      right: -8px;
-      bottom: 44px;
+      right: -9px;
+      bottom: 35px;
       writing-mode: vertical-rl;
       color: var(--muted);
       font-size: 9px;
@@ -188,7 +208,7 @@
     .visual-note {
       position: absolute;
       bottom: 0;
-      left: -35px;
+      left: -28px;
       padding: 13px 17px;
       background: var(--paper);
       border: 1px solid var(--line);
@@ -225,8 +245,9 @@
 
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+      gap: 28px 22px;
     }
 
     .gallery-item {
@@ -235,17 +256,19 @@
       cursor: zoom-in;
     }
 
+    /* Galeria: altura automática, sem cortes ou proporção forçada. */
     .gallery-item img {
       display: block;
       width: 100%;
-      aspect-ratio: 3 / 4;
-      object-fit: cover;
-      background: #e9e5de;
-      transition: filter .3s, transform .5s;
+      height: auto;
+      aspect-ratio: auto;
+      object-fit: contain;
+      background: transparent;
+      transition: filter .3s;
     }
 
     .gallery-item:hover img {
-      filter: brightness(.92);
+      filter: brightness(.94);
     }
 
     .gallery-item figcaption {
@@ -316,9 +339,17 @@
       transform: translateY(0);
     }
 
-    .delay-1 { transition-delay: .15s; }
-    .delay-2 { transition-delay: .3s; }
-    .delay-3 { transition-delay: .45s; }
+    .delay-1 {
+      transition-delay: .15s;
+    }
+
+    .delay-2 {
+      transition-delay: .3s;
+    }
+
+    .delay-3 {
+      transition-delay: .45s;
+    }
 
     .lightbox {
       position: fixed;
@@ -332,11 +363,16 @@
       cursor: zoom-out;
     }
 
-    .lightbox.open { display: flex; }
+    .lightbox.open {
+      display: flex;
+    }
 
     .lightbox img {
+      display: block;
       max-width: 94vw;
       max-height: 88vh;
+      width: auto;
+      height: auto;
       object-fit: contain;
     }
 
@@ -365,7 +401,9 @@
     }
 
     @media (max-width: 760px) {
-      .wrap { width: 88%; }
+      .wrap {
+        width: 88%;
+      }
 
       header {
         min-height: 76px;
@@ -373,8 +411,14 @@
         padding-block: 17px;
       }
 
-      .brand { font-size: 10px; }
-      .brand-mark { width: 29px; height: 29px; }
+      .brand {
+        font-size: 10px;
+      }
+
+      .brand-mark {
+        width: 29px;
+        height: 29px;
+      }
 
       nav {
         width: 100%;
@@ -390,33 +434,51 @@
         padding-block: 64px 70px;
       }
 
-      h1 { font-size: clamp(43px, 11vw, 62px); }
-
-      .hero-visual {
-        width: 90%;
-        justify-self: center;
-        margin-left: 10px;
+      h1 {
+        font-size: clamp(43px, 11vw, 62px);
       }
 
-      .hero-photo { height: min(118vw, 510px); }
-      .visual-note { left: -20px; }
+      .hero-visual {
+        width: 100%;
+        max-width: 600px;
+        justify-self: center;
+        margin-left: 0;
+      }
 
-      .gallery { padding-block: 60px 75px; }
+      .hero-photo {
+        width: 100%;
+        height: auto;
+        max-height: none;
+      }
+
+      .visual-note {
+        left: -8px;
+      }
+
+      .gallery {
+        padding-block: 60px 75px;
+      }
 
       .section-top {
         align-items: start;
         flex-direction: column;
       }
 
-      .section-top p { margin-bottom: 0; }
-
-      .gallery-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 24px 12px;
+      .section-top p {
+        margin-bottom: 0;
       }
 
-      .gallery-item:last-child { grid-column: 1 / -1; }
-      .gallery-item:last-child img { aspect-ratio: 4 / 3; }
+      .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      .gallery-item img {
+        width: 100%;
+        height: auto;
+        aspect-ratio: auto;
+        object-fit: contain;
+      }
 
       .about {
         grid-template-columns: 1fr;
@@ -424,7 +486,9 @@
         gap: 32px;
       }
 
-      .about-mark { min-height: 230px; }
+      .about-mark {
+        min-height: 230px;
+      }
 
       footer {
         flex-direction: column;
@@ -487,6 +551,7 @@
           <div class="eyebrow reveal">Arquivo visual</div>
           <h2 class="reveal delay-1">Coleção de instantes</h2>
         </div>
+
         <p class="reveal delay-2">
           Três olhares. Mil histórias.
           A vida acontecendo diante da câmera.
@@ -495,24 +560,39 @@
 
       <div class="gallery-grid">
         <figure class="gallery-item reveal">
-          <img src="fotos/DSC_0147.jpg"
-               alt="Fotografia de rua, primeiro instante"
-               loading="lazy">
-          <figcaption><span>01 / Instante</span><span>Fotografia</span></figcaption>
+          <img
+            src="fotos/DSC_0147.jpg"
+            alt="Fotografia de rua, primeiro instante"
+            loading="lazy"
+          >
+          <figcaption>
+            <span>01 / Instante</span>
+            <span>Fotografia</span>
+          </figcaption>
         </figure>
 
         <figure class="gallery-item reveal delay-1">
-          <img src="fotos/DSC_0229.jpg"
-               alt="Fotografia de rua, segundo instante"
-               loading="lazy">
-          <figcaption><span>02 / Cotidiano</span><span>Fotografia</span></figcaption>
+          <img
+            src="fotos/DSC_0229.jpg"
+            alt="Fotografia de rua, segundo instante"
+            loading="lazy"
+          >
+          <figcaption>
+            <span>02 / Cotidiano</span>
+            <span>Fotografia</span>
+          </figcaption>
         </figure>
 
         <figure class="gallery-item reveal delay-2">
-          <img src="fotos/DSC_0719.jpg"
-               alt="Fotografia de rua, terceiro instante"
-               loading="lazy">
-          <figcaption><span>03 / Memória</span><span>Fotografia</span></figcaption>
+          <img
+            src="fotos/DSC_0719.jpg"
+            alt="Fotografia de rua, terceiro instante"
+            loading="lazy"
+          >
+          <figcaption>
+            <span>03 / Memória</span>
+            <span>Fotografia</span>
+          </figcaption>
         </figure>
       </div>
     </section>
@@ -522,12 +602,17 @@
 
       <div>
         <div class="eyebrow reveal">Sobre o projeto</div>
-        <h2 class="reveal delay-1">Fotografar é ver o que passa despercebido.</h2>
+
+        <h2 class="reveal delay-1">
+          Fotografar é ver o que passa despercebido.
+        </h2>
+
         <p class="reveal delay-2">
           A fotografia de rua é um registro da vida como ela acontece:
           encontros, movimentos, pessoas e pequenos detalhes que,
           por um instante, contam uma história.
         </p>
+
         <p class="reveal delay-3">
           Cada imagem é um fragmento do tempo — um momento real que
           nunca acontecerá exatamente da mesma maneira.
@@ -541,14 +626,19 @@
     <a href="#inicio">Voltar ao início ↑</a>
   </footer>
 
-  <div class="lightbox" id="lightbox" role="dialog"
-       aria-modal="true" aria-label="Fotografia ampliada">
+  <div
+    class="lightbox"
+    id="lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Fotografia ampliada"
+  >
     <button id="closeLightbox" aria-label="Fechar fotografia">×</button>
     <img id="lightboxImage" src="" alt="">
   </div>
 
   <script>
-    // Revela os textos e imagens ao entrarem na tela.
+    // Anima os elementos quando entram na tela.
     const revealElements = document.querySelectorAll(".reveal");
 
     if ("IntersectionObserver" in window) {
@@ -563,10 +653,12 @@
 
       revealElements.forEach((element) => observer.observe(element));
     } else {
-      revealElements.forEach((element) => element.classList.add("visible"));
+      revealElements.forEach((element) => {
+        element.classList.add("visible");
+      });
     }
 
-    // Abre as fotografias em tamanho ampliado.
+    // Ampliação opcional ao clicar na fotografia.
     const lightbox = document.getElementById("lightbox");
     const lightboxImage = document.getElementById("lightboxImage");
     const closeButton = document.getElementById("closeLightbox");
@@ -590,11 +682,15 @@
     closeButton.addEventListener("click", closeLightbox);
 
     lightbox.addEventListener("click", (event) => {
-      if (event.target === lightbox) closeLightbox();
+      if (event.target === lightbox) {
+        closeLightbox();
+      }
     });
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") closeLightbox();
+      if (event.key === "Escape") {
+        closeLightbox();
+      }
     });
   </script>
 </body>
