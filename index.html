@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,34 +7,46 @@
   <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Fotografia de rua, momentos reais e instantes da vida.">
   <title>Minha Galeria Fotográfica</title>
+
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       background: #fff;
       color: #111;
       font-family: Arial, sans-serif;
     }
+
     header {
       padding: 42px 20px 28px;
       text-align: center;
     }
+
     h1 {
       margin: 0 0 12px;
       font-size: clamp(28px, 5vw, 48px);
       letter-spacing: 2px;
     }
-    header p { color: #aaa; }
+
+    header p {
+      color: #aaa;
+    }
+
     main {
       max-width: 1400px;
       margin: auto;
       padding: 12px;
     }
+
     .galeria {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 12px;
     }
+
     .galeria img {
       display: block;
       width: 100%;
@@ -43,29 +56,39 @@
       cursor: pointer;
       transition: opacity .2s;
     }
-    .galeria img:hover { opacity: .85; }
+
+    .galeria img:hover {
+      opacity: .85;
+    }
+
     footer {
       padding: 35px 15px;
       text-align: center;
       color: #888;
       font-size: 13px;
     }
+
     #visualizador {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.94);
+      background: rgba(0, 0, 0, .94);
       z-index: 10;
       align-items: center;
       justify-content: center;
       padding: 20px;
     }
-    #visualizador.aberto { display: flex; }
+
+    #visualizador.aberto {
+      display: flex;
+    }
+
     #visualizador img {
       max-width: 100%;
       max-height: 90vh;
       object-fit: contain;
     }
+
     #fechar {
       position: absolute;
       top: 15px;
@@ -78,6 +101,7 @@
     }
   </style>
 </head>
+
 <body>
   <header>
     <h1>MINHA GALERIA</h1>
@@ -93,16 +117,15 @@
     <img id="fotoGrande" alt="Fotografia ampliada">
   </div>
 
-  <footer>Fotografia autoral · Todos os direitos reservados</footer>
+  <footer>
+    Fotografia autoral · Todos os direitos reservados
+  </footer>
 
   <script>
     const fotos = [
       "DSC_0147.jpg",
       "DSC_0229.jpg",
-      "DSC_0147.jpg"
-      "file_000000000fa881f4905ce4f7666c4d99.png",
-      "file_000000003844820db97ba4912d53fefb.png",
-      "file_00000000bc5c82469ce83ee61104cec0.png"
+      "DSC_0719.jpg"
     ];
 
     const galeria = document.getElementById("galeria");
@@ -111,25 +134,42 @@
 
     fotos.forEach(nome => {
       const img = document.createElement("img");
+
       img.src = "fotos/" + nome;
       img.alt = "Fotografia autoral";
       img.loading = "lazy";
+
       img.onclick = () => {
         fotoGrande.src = img.src;
         visualizador.classList.add("aberto");
       };
-      img.onerror = () => img.remove();
+
+      img.onerror = () => {
+        console.error("Não foi possível carregar a foto:", nome);
+        img.remove();
+      };
+
       galeria.appendChild(img);
     });
 
-    document.getElementById("fechar").onclick = () =>
+    document.getElementById("fechar").onclick = () => {
       visualizador.classList.remove("aberto");
+      fotoGrande.src = "";
+    };
 
     visualizador.onclick = evento => {
       if (evento.target === visualizador) {
         visualizador.classList.remove("aberto");
+        fotoGrande.src = "";
       }
     };
+
+    document.addEventListener("keydown", evento => {
+      if (evento.key === "Escape") {
+        visualizador.classList.remove("aberto");
+        fotoGrande.src = "";
+      }
+    });
   </script>
 </body>
 </html>
