@@ -569,43 +569,7 @@
         </p>
       </div>
 
-      <div class="gallery-grid">
-        <figure class="gallery-item reveal">
-          <img
-            src="fotos/DSC_0147.jpg"
-            alt="Fotografia de rua, primeiro instante"
-            loading="lazy"
-          >
-          <figcaption>
-            <span>01 / Instante</span>
-            <span>Fotografia</span>
-          </figcaption>
-        </figure>
-
-        <figure class="gallery-item reveal delay-1">
-          <img
-            src="fotos/DSC_0229.jpg"
-            alt="Fotografia de rua, segundo instante"
-            loading="lazy"
-          >
-          <figcaption>
-            <span>02 / Cotidiano</span>
-            <span>Fotografia</span>
-          </figcaption>
-        </figure>
-
-        <figure class="gallery-item reveal delay-2">
-          <img
-            src="fotos/DSC_0719.jpg"
-            alt="Fotografia de rua, terceiro instante"
-            loading="lazy"
-          >
-          <figcaption>
-            <span>03 / Memória</span>
-            <span>Fotografia</span>
-          </figcaption>
-        </figure>
-      </div>
+      <div class="gallery-grid" id="galleryGrid"></div>
     </section>
 
     <section class="about wrap" id="sobre">
@@ -674,15 +638,72 @@
     const lightboxImage = document.getElementById("lightboxImage");
     const closeButton = document.getElementById("closeLightbox");
 
-    document.querySelectorAll(".gallery-item img").forEach((image) => {
-      image.addEventListener("click", () => {
-        lightboxImage.src = image.src;
-        lightboxImage.alt = image.alt;
-        lightbox.classList.add("open");
-        document.body.style.overflow = "hidden";
-        closeButton.focus();
+    const galleryGrid = document.getElementById("galleryGrid");
+
+    async function loadPublicGallery() {
+      const fallbackPhotos = ["DSC_0147.jpg", "DSC_0229.jpg", "DSC_0719.jpg"];
+      let photoNames = fallbackPhotos;
+
+      try {
+        const response = await fetch("galeria.json?atualizacao=" + Date.now());
+        if (response.ok) {
+          const data = await response.json();
+          if (Array.isArray(data.photos)) {
+            photoNames = data.photos.map(photo =>
+              typeof photo === "string" ? photo : photo.name
+            ).filter(Boolean);
+          }
+        }
+      } catch (error) {
+        console.warn("Usando fotografias padrão:", error);
+      }
+
+      galleryGrid.replaceChildren();
+
+      photoNames.forEach((name, index) => {
+        const figure = document.createElement("figure");
+        figure.className = "gallery-item reveal";
+
+        const img = document.createElement("img");
+        img.src = "fotos/" + encodeURIComponent(name);
+        img.alt = "Fotografia de rua: " + name;
+        img.loading = "lazy";
+
+        const caption = document.createElement("figcaption");
+        const first = document.createElement("span");
+        first.textContent = String(index + 1).padStart(2, "0") + " / Instante";
+        const second = document.createElement("span");
+        second.textContent = "Fotografia";
+
+        caption.append(first, second);
+        figure.append(img, caption);
+        galleryGrid.append(figure);
+
+        if (typeof observer !== "undefined") {
+          observer.observe(figure);
+        } else {
+          figure.classList.add("visible");
+        }
       });
+
+      const hero = document.querySelector(".hero-photo");
+      if (hero && photoNames.length) {
+        hero.src = "fotos/" + encodeURIComponent(photoNames[0]);
+      }
+    }
+
+    loadPublicGallery();
+
+    galleryGrid.addEventListener("click", (event) => {
+      const image = event.target.closest("img");
+      if (!image) return;
+      lightboxImage.src = image.src;
+      lightboxImage.alt = image.alt;
+      lightbox.classList.add("open");
+      document.body.style.overflow = "hidden";
+      closeButton.focus();
     });
+
 
     function closeLightbox() {
       lightbox.classList.remove("open");
