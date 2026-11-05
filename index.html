@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -23,7 +24,6 @@
     gtag('js', new Date());
     gtag('config', 'G-M5HM1J7N88');
   </script>
-  <!-- Fim do Google Analytics -->
 
   <style>
     :root {
@@ -282,7 +282,6 @@
       display: block;
       width: 100%;
       height: auto;
-      aspect-ratio: auto;
       object-fit: contain;
       background: transparent;
       transition: filter .3s;
@@ -372,7 +371,7 @@
       transition-delay: .45s;
     }
 
-    /* Visualização ampliada */
+    /* Visualizador de fotografias */
     .lightbox {
       position: fixed;
       z-index: 1000;
@@ -556,7 +555,6 @@
       .gallery-item img {
         width: 100%;
         height: auto;
-        aspect-ratio: auto;
         object-fit: contain;
       }
 
@@ -714,28 +712,16 @@
     aria-label="Fotografia ampliada"
     aria-hidden="true"
   >
-    <button
-      class="lightbox-close"
-      id="closeLightbox"
-      aria-label="Fechar fotografia"
-      type="button"
-    >×</button>
+    <button class="lightbox-close" id="closeLightbox"
+      aria-label="Fechar fotografia" type="button">×</button>
 
-    <button
-      class="lightbox-prev"
-      id="prevLightbox"
-      aria-label="Fotografia anterior"
-      type="button"
-    >‹</button>
+    <button class="lightbox-prev" id="prevLightbox"
+      aria-label="Fotografia anterior" type="button">‹</button>
 
     <img id="lightboxImage" src="" alt="">
 
-    <button
-      class="lightbox-next"
-      id="nextLightbox"
-      aria-label="Próxima fotografia"
-      type="button"
-    >›</button>
+    <button class="lightbox-next" id="nextLightbox"
+      aria-label="Próxima fotografia" type="button">›</button>
 
     <span class="lightbox-caption" id="lightboxCaption"></span>
     <span class="lightbox-counter" id="lightboxCounter"></span>
@@ -755,11 +741,11 @@
         });
       }, { threshold: 0.12 });
 
-      document.querySelectorAll(".reveal").forEach((element) => {
+      document.querySelectorAll(".reveal").forEach(element => {
         observer.observe(element);
       });
     } else {
-      document.querySelectorAll(".reveal").forEach((element) => {
+      document.querySelectorAll(".reveal").forEach(element => {
         element.classList.add("visible");
       });
     }
@@ -773,6 +759,7 @@
     const nextButton = document.getElementById("nextLightbox");
     const lightboxCounter = document.getElementById("lightboxCounter");
     const lightboxCaption = document.getElementById("lightboxCaption");
+    const heroPhoto = document.querySelector(".hero-photo");
 
     let photos = [];
     let currentPhotoIndex = 0;
@@ -780,43 +767,55 @@
     let touchStartX = 0;
     let touchStartY = 0;
 
-    // Carrega as fotografias do arquivo galeria.json.
-    async function loadPublicGallery() {
-      const fallbackPhotos = [
-        "DSC_0147.jpg",
-        "DSC_0229.jpg",
-        "DSC_0719.jpg"
-      ];
+    // Fotografias padrão, usadas se galeria.json não estiver disponível.
+    const fallbackPhotos = [
+      "DSC_0147.jpg",
+      "DSC_0229.jpg",
+      "DSC_0719.jpg"
+    ];
 
+    // Aceita apenas nomes de arquivos de imagem.
+    function validPhotoName(name) {
+      return typeof name === "string" &&
+        /^[a-zA-Z0-9À-ÿ _().-]+\.(jpg|jpeg|png|webp|avif)$/i.test(name);
+    }
+
+    // Carrega as fotografias.
+    async function loadPublicGallery() {
       let photoNames = fallbackPhotos;
 
       try {
         const response = await fetch(
-          "galeria.json?atualizacao=" + Date.now()
+          "galeria.json?atualizacao=" + Date.now(),
+          { cache: "no-store" }
         );
 
-        if (response.ok) {
-          const data = await response.json();
+        if (!response.ok) {
+          throw new Error("Não foi possível carregar galeria.json");
+        }
 
-          if (Array.isArray(data.photos)) {
-            photoNames = data.photos
-              .map(photo =>
-                typeof photo === "string" ? photo : photo.name
-              )
-              .filter(name =>
-                typeof name === "string" &&
-                /^[a-zA-Z0-9À-ÿ _.-]+\.(jpg|jpeg|png|webp|avif)$/i.test(name)
-              );
+        const data = await response.json();
+
+        if (Array.isArray(data.photos)) {
+          const receivedPhotos = data.photos
+            .map(photo =>
+              typeof photo === "string" ? photo : photo?.name
+            )
+            .filter(validPhotoName);
+
+          // Só substitui as fotos padrão se houver fotos válidas.
+          if (receivedPhotos.length > 0) {
+            photoNames = receivedPhotos;
           }
         }
       } catch (error) {
         console.warn("Usando fotografias padrão:", error);
       }
 
-      // Evita nomes duplicados.
+      // Remove nomes duplicados.
       photoNames = [...new Set(photoNames)];
 
-      photos = photoNames.map((name) => ({
+      photos = photoNames.map(name => ({
         name,
         src: "fotos/" + encodeURIComponent(name),
         alt: "Fotografia de rua: " + name
@@ -834,6 +833,12 @@
         img.loading = "lazy";
         img.decoding = "async";
 
+        // Se uma foto não existir, remove apenas aquele item.
+        img.addEventListener("error", () => {
+          figure.remove();
+          console.error("Não foi possível carregar:", photo.src);
+        }, { once: true });
+
         const caption = document.createElement("figcaption");
 
         const first = document.createElement("span");
@@ -847,43 +852,22 @@
         figure.append(img, caption);
         galleryGrid.append(figure);
 
-        // Aplica animação também às fotografias criadas dinamicamente.
         if (observer) {
           observer.observe(figure);
         } else {
           figure.classList.add("visible");
         }
       });
+
+      // Atualiza a fotografia principal.
+      if (photos.length > 0 && heroPhoto) {
+        heroPhoto.src = photos[0].src;
+      }
     }
 
+    // Inicia o carregamento da galeria.
     loadPublicGallery();
 
-    // Abre uma fotografia específica.
-    function openLightbox(index, sourceElement) {
-      if (!photos.length) return;
-
-      currentPhotoIndex = index;
-      lastFocusedElement = sourceElement;
-
-      updateLightbox();
-
-      lightbox.classList.add("open");
-      lightbox.setAttribute("aria-hidden", "false");
-      document.body.classList.add("lightbox-open");
-
-      closeButton.focus();
-    }
-
-    // Atualiza a fotografia exibida.
+    // Atualiza a fotografia ampliada e o contador.
     function updateLightbox() {
-      const photo = photos[currentPhotoIndex];
-
-      if (!photo) return;
-
-      lightboxImage.src = photo.src;
-      lightboxImage.alt = photo.alt;
-
-      lightboxCaption.textContent = photo.name;
-
-      lightboxCounter.textContent =
-        (cu
+      const phot
