@@ -1,14 +1,43 @@
-
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!--
+    SEGURANÇA — Content Security Policy.
+    Os scripts inline são liberados por HASH (sha256). Se você editar o conteúdo
+    de qualquer <script> inline, o hash muda e o script deixa de rodar.
+    Nesse caso, gere o novo hash (o console do navegador mostra o valor esperado).
+  -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-GbsrCPZmn4SjuBnS0PBQ4DgbpMlbAPy6m1hmKulncDo=' 'sha256-lPL4DnSrHdI87nQLBV5zs70V1HyQ2uTqvq3tjSBIHg0=' 'sha256-o+lGx2IzeosJIXjY3UGFeosaCraOhEOlNIuLABYvF7k=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+  <!-- Impede que outros sites exibam esta página dentro de um iframe (clickjacking). -->
+  <script>
+    if (window.top !== window.self) {
+      document.documentElement.style.display = "none";
+      try { window.top.location.href = window.self.location.href; } catch (e) {}
+    }
+  </script>
+
   <meta name="theme-color" content="#faf9f6">
   <meta name="description" content="Fotografia de rua. Cada segundo é uma cena. Cada foto, uma história.">
   <title>Fotografia de Rua — Cada instante, uma história</title>
+
+  <!-- Compartilhamento (WhatsApp, Instagram, LinkedIn, X) -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Fotografia de Rua — Cada instante, uma história">
+  <meta property="og:description" content="Fotografia de rua. Cada segundo é uma cena. Cada foto, uma história.">
+  <!-- Quando quiser prévia com imagem, descomente e use a URL completa do site:
+  <meta property="og:image" content="https://SEU-USUARIO.github.io/SEU-REPOSITORIO/fotos/SUA-FOTO.jpg">
+  <meta property="og:url" content="https://SEU-USUARIO.github.io/SEU-REPOSITORIO/">
+  <link rel="canonical" href="https://SEU-USUARIO.github.io/SEU-REPOSITORIO/">
+  -->
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%2320201e' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%2320201e'/%3E%3C/svg%3E">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,7 +57,7 @@
     :root {
       --paper: #faf9f6;
       --ink: #20201e;
-      --muted: #77746d;
+      --muted: #6b6861;
       --line: #dedbd4;
       --accent: #a49681;
     }
@@ -46,7 +75,12 @@
       margin: 0;
       background: var(--paper);
       color: var(--ink);
-      font-family: "DM Sans", sans-serif;
+      font-family: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+      overflow-x: clip;
+    }
+
+    body.no-scroll {
+      overflow: hidden;
     }
 
     a {
@@ -56,6 +90,13 @@
 
     button {
       font: inherit;
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    .gallery-item:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 4px;
     }
 
     .wrap {
@@ -89,13 +130,17 @@
       border-radius: 50%;
       display: grid;
       place-items: center;
-      font-size: 20px;
+    }
+
+    .brand-mark svg {
+      width: 20px;
+      height: 20px;
     }
 
     nav {
       display: flex;
       gap: clamp(16px, 3vw, 42px);
-      font-size: 10px;
+      font-size: 11px;
       letter-spacing: .16em;
       text-transform: uppercase;
     }
@@ -122,7 +167,7 @@
       align-items: center;
       gap: 16px;
       color: var(--muted);
-      font-size: 10px;
+      font-size: 11px;
       letter-spacing: .22em;
       text-transform: uppercase;
     }
@@ -148,7 +193,7 @@
     }
 
     h1 em {
-      color: #827563;
+      color: #6f6353;
       font-weight: 400;
     }
 
@@ -166,7 +211,7 @@
       margin-top: 26px;
       padding: 16px 20px;
       border: 1px solid var(--ink);
-      font-size: 10px;
+      font-size: 11px;
       letter-spacing: .15em;
       text-transform: uppercase;
       transition: background .25s, color .25s;
@@ -212,7 +257,7 @@
       bottom: 35px;
       writing-mode: vertical-rl;
       color: var(--muted);
-      font-size: 9px;
+      font-size: 10px;
       letter-spacing: .2em;
       text-transform: uppercase;
     }
@@ -289,9 +334,15 @@
       gap: 10px;
       padding-top: 13px;
       color: var(--muted);
-      font-size: 10px;
+      font-size: 11px;
       letter-spacing: .12em;
       text-transform: uppercase;
+    }
+
+    .gallery-empty {
+      grid-column: 1 / -1;
+      color: var(--muted);
+      font-size: 14px;
     }
 
     .about {
@@ -311,7 +362,11 @@
       background:
         linear-gradient(135deg, transparent 49.8%, #e7e2d9 50%, transparent 50.2%);
       color: var(--accent);
-      font-size: 64px;
+    }
+
+    .about-mark svg {
+      width: 64px;
+      height: 64px;
     }
 
     .about h2 {
@@ -336,7 +391,7 @@
       padding-block: 28px;
       border-top: 1px solid var(--line);
       color: var(--muted);
-      font-size: 10px;
+      font-size: 11px;
       letter-spacing: .1em;
     }
 
@@ -388,15 +443,50 @@
       object-fit: contain;
     }
 
-    .lightbox button {
+    .lb-btn {
       position: absolute;
-      top: 18px;
-      right: 24px;
       color: white;
       border: 0;
       background: transparent;
-      font-size: 32px;
+      font-size: 36px;
+      line-height: 1;
       cursor: pointer;
+      padding: 10px 16px;
+    }
+
+    .lb-btn:focus-visible {
+      outline-color: white;
+    }
+
+    .lb-close {
+      top: 14px;
+      right: 18px;
+      font-size: 32px;
+    }
+
+    .lb-prev,
+    .lb-next {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .lb-prev {
+      left: 8px;
+    }
+
+    .lb-next {
+      right: 8px;
+    }
+
+    .lb-btn[hidden] {
+      display: none;
+    }
+
+    noscript .noscript-msg {
+      display: block;
+      padding: 24px 0;
+      color: var(--muted);
+      font-size: 14px;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -424,7 +514,7 @@
       }
 
       .brand {
-        font-size: 10px;
+        font-size: 11px;
       }
 
       .brand-mark {
@@ -436,7 +526,7 @@
         width: 100%;
         justify-content: space-between;
         gap: 12px;
-        font-size: 9px;
+        font-size: 11px;
       }
 
       .hero {
@@ -502,6 +592,12 @@
         min-height: 230px;
       }
 
+      .lb-prev,
+      .lb-next {
+        font-size: 30px;
+        padding: 10px 10px;
+      }
+
       footer {
         flex-direction: column;
         line-height: 1.8;
@@ -513,7 +609,9 @@
 <body>
   <header class="wrap">
     <a class="brand" href="#inicio" aria-label="Página inicial">
-      <span class="brand-mark">◉</span>
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4.5" fill="currentColor"/></svg>
+      </span>
       <span>Fotografia de Rua</span>
     </a>
 
@@ -540,7 +638,7 @@
         </p>
 
         <a class="cta reveal delay-3" href="#galeria">
-          Explorar galeria <span>↓</span>
+          Explorar galeria <span aria-hidden="true">↓</span>
         </a>
       </div>
 
@@ -551,6 +649,8 @@
           src="fotos/DSC_0147.jpg"
           alt="Fotografia de rua: um instante do cotidiano"
           fetchpriority="high"
+          decoding="async"
+          referrerpolicy="no-referrer"
         >
         <span class="photo-caption">Instantes reais · Histórias únicas</span>
         <div class="visual-note">Momentos que não se repetem.</div>
@@ -570,11 +670,15 @@
         </p>
       </div>
 
-      <div class="gallery-grid" id="galleryGrid"></div>
+      <div class="gallery-grid" id="galleryGrid">
+        <noscript><span class="noscript-msg">Ative o JavaScript para ver a galeria.</span></noscript>
+      </div>
     </section>
 
     <section class="about wrap" id="sobre">
-      <div class="about-mark reveal" aria-hidden="true">◉</div>
+      <div class="about-mark reveal" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="12" cy="12" r="4.5" fill="currentColor"/></svg>
+      </div>
 
       <div>
         <div class="eyebrow reveal">Sobre o projeto</div>
@@ -599,7 +703,7 @@
 
   <footer class="wrap" id="contato">
     <span>FOTOGRAFIA DE RUA · UM OLHAR SOBRE A VIDA REAL</span>
-    <a href="#inicio">Voltar ao início ↑</a>
+    <a href="#inicio">Voltar ao início <span aria-hidden="true">↑</span></a>
   </footer>
 
   <div
@@ -608,17 +712,47 @@
     role="dialog"
     aria-modal="true"
     aria-label="Fotografia ampliada"
+    aria-hidden="true"
   >
-    <button id="closeLightbox" aria-label="Fechar fotografia">×</button>
-    <img id="lightboxImage" src="" alt="">
+    <button class="lb-btn lb-close" id="closeLightbox" type="button" aria-label="Fechar fotografia">×</button>
+    <button class="lb-btn lb-prev" id="prevPhoto" type="button" aria-label="Fotografia anterior">‹</button>
+    <img id="lightboxImage" alt="" decoding="async" referrerpolicy="no-referrer">
+    <button class="lb-btn lb-next" id="nextPhoto" type="button" aria-label="Próxima fotografia">›</button>
   </div>
 
   <script>
-    // Anima os elementos quando entram na tela.
-    const revealElements = document.querySelectorAll(".reveal");
+    "use strict";
+
+    /* ---------- Configurações de segurança ---------- */
+    // Só aceita nomes de arquivo de imagem simples (sem pastas, sem "..", sem URLs).
+    const SAFE_NAME = /^[\p{L}\p{N}_\-. ()]{1,120}\.(?:jpe?g|png|webp|avif|gif)$/iu;
+    const MAX_PHOTOS = 60;
+    const FALLBACK_PHOTOS = ["DSC_0147.jpg", "DSC_0229.jpg", "DSC_0719.jpg"];
+
+    function cleanText(value, max) {
+      return typeof value === "string" ? value.trim().slice(0, max) : "";
+    }
+
+    function normalizePhoto(item) {
+      const raw = typeof item === "string" ? { name: item } : item;
+      if (!raw || typeof raw !== "object") return null;
+
+      const name = typeof raw.name === "string" ? raw.name.trim() : "";
+      if (!SAFE_NAME.test(name) || name.includes("..")) return null;
+
+      return {
+        name,
+        alt: cleanText(raw.alt, 200),
+        title: cleanText(raw.title, 60),
+        place: cleanText(raw.place, 60)
+      };
+    }
+
+    /* ---------- Animação de entrada ---------- */
+    let observer = null;
 
     if ("IntersectionObserver" in window) {
-      const observer = new IntersectionObserver((entries) => {
+      observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("visible");
@@ -626,105 +760,42 @@
           }
         });
       }, { threshold: 0.12 });
-
-      revealElements.forEach((element) => observer.observe(element));
-    } else {
-      revealElements.forEach((element) => {
-        element.classList.add("visible");
-      });
     }
 
-    // Ampliação opcional ao clicar na fotografia.
+    function reveal(element) {
+      if (observer) {
+        observer.observe(element);
+      } else {
+        element.classList.add("visible");
+      }
+    }
+
+    document.querySelectorAll(".reveal").forEach(reveal);
+
+    /* ---------- Lightbox ---------- */
     const lightbox = document.getElementById("lightbox");
     const lightboxImage = document.getElementById("lightboxImage");
     const closeButton = document.getElementById("closeLightbox");
-
+    const prevButton = document.getElementById("prevPhoto");
+    const nextButton = document.getElementById("nextPhoto");
     const galleryGrid = document.getElementById("galleryGrid");
 
-    async function loadPublicGallery() {
-      const fallbackPhotos = ["DSC_0147.jpg", "DSC_0229.jpg", "DSC_0719.jpg"];
-      let photoNames = fallbackPhotos;
+    let currentIndex = 0;
+    let lastFocused = null;
+    let touchStartX = null;
 
-      try {
-        const response = await fetch("galeria.json?atualizacao=" + Date.now());
-        if (response.ok) {
-          const data = await response.json();
-          if (Array.isArray(data.photos)) {
-            photoNames = data.photos.map(photo =>
-              typeof photo === "string" ? photo : photo.name
-            ).filter(Boolean);
-          }
-        }
-      } catch (error) {
-        console.warn("Usando fotografias padrão:", error);
-      }
-
-      galleryGrid.replaceChildren();
-
-      photoNames.forEach((name, index) => {
-        const figure = document.createElement("figure");
-        figure.className = "gallery-item reveal";
-
-        const img = document.createElement("img");
-        img.src = "fotos/" + encodeURIComponent(name);
-        img.alt = "Fotografia de rua: " + name;
-        img.loading = "lazy";
-
-        const caption = document.createElement("figcaption");
-        const first = document.createElement("span");
-        first.textContent = String(index + 1).padStart(2, "0") + " / Instante";
-        const second = document.createElement("span");
-        second.textContent = "Fotografia";
-
-        caption.append(first, second);
-        figure.append(img, caption);
-        galleryGrid.append(figure);
-
-        if (typeof observer !== "undefined") {
-          observer.observe(figure);
-        } else {
-          figure.classList.add("visible");
-        }
-      });
-
-      const hero = document.querySelector(".hero-photo");
-      if (hero && photoNames.length) {
-        hero.src = "fotos/" + encodeURIComponent(photoNames[0]);
-      }
+    function galleryImages() {
+      return Array.from(galleryGrid.querySelectorAll(".gallery-item img"));
     }
 
-    loadPublicGallery();
+    function showPhoto(index) {
+      const images = galleryImages();
+      if (!images.length) return;
 
-    galleryGrid.addEventListener("click", (event) => {
-      const image = event.target.closest("img");
-      if (!image) return;
+      currentIndex = (index + images.length) % images.length;
+      const image = images[currentIndex];
       lightboxImage.src = image.src;
       lightboxImage.alt = image.alt;
-      lightbox.classList.add("open");
-      document.body.style.overflow = "hidden";
-      closeButton.focus();
-    });
 
-
-    function closeLightbox() {
-      lightbox.classList.remove("open");
-      document.body.style.overflow = "";
-      lightboxImage.src = "";
-    }
-
-    closeButton.addEventListener("click", closeLightbox);
-
-    lightbox.addEventListener("click", (event) => {
-      if (event.target === lightbox) {
-        closeLightbox();
-      }
-    });
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        closeLightbox();
-      }
-    });
-  </script>
-</body>
-</html>
+      const single = images.length < 2;
+      prevButton.hidde
