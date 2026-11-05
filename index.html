@@ -3,41 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!--
-    SEGURANÇA — Content Security Policy.
-    Os scripts inline são liberados por HASH (sha256). Se você editar o conteúdo
-    de qualquer <script> inline, o hash muda e o script deixa de rodar.
-    Nesse caso, gere o novo hash (o console do navegador mostra o valor esperado).
-  -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-GbsrCPZmn4SjuBnS0PBQ4DgbpMlbAPy6m1hmKulncDo=' 'sha256-lPL4DnSrHdI87nQLBV5zs70V1HyQ2uTqvq3tjSBIHg0=' 'sha256-o+lGx2IzeosJIXjY3UGFeosaCraOhEOlNIuLABYvF7k=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
-
-  <!-- Impede que outros sites exibam esta página dentro de um iframe (clickjacking). -->
-  <script>
-    if (window.top !== window.self) {
-      document.documentElement.style.display = "none";
-      try { window.top.location.href = window.self.location.href; } catch (e) {}
-    }
-  </script>
-
   <meta name="theme-color" content="#faf9f6">
   <meta name="description" content="Fotografia de rua. Cada segundo é uma cena. Cada foto, uma história.">
-  <title>Fotografia de Rua — Cada instante, uma história</title>
-
-  <!-- Compartilhamento (WhatsApp, Instagram, LinkedIn, X) -->
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="pt_BR">
   <meta property="og:title" content="Fotografia de Rua — Cada instante, uma história">
-  <meta property="og:description" content="Fotografia de rua. Cada segundo é uma cena. Cada foto, uma história.">
-  <!-- Quando quiser prévia com imagem, descomente e use a URL completa do site:
-  <meta property="og:image" content="https://SEU-USUARIO.github.io/SEU-REPOSITORIO/fotos/SUA-FOTO.jpg">
-  <meta property="og:url" content="https://SEU-USUARIO.github.io/SEU-REPOSITORIO/">
-  <link rel="canonical" href="https://SEU-USUARIO.github.io/SEU-REPOSITORIO/">
-  -->
-  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:description" content="O cotidiano visto por outro olhar. Cada segundo é uma cena. Cada foto, uma história.">
+  <meta property="og:type" content="website">
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%2320201e' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%2320201e'/%3E%3C/svg%3E">
+  <title>Fotografia de Rua — Cada instante, uma história</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -57,7 +29,7 @@
     :root {
       --paper: #faf9f6;
       --ink: #20201e;
-      --muted: #6b6861;
+      --muted: #77746d;
       --line: #dedbd4;
       --accent: #a49681;
     }
@@ -75,11 +47,10 @@
       margin: 0;
       background: var(--paper);
       color: var(--ink);
-      font-family: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-      overflow-x: clip;
+      font-family: "DM Sans", sans-serif;
     }
 
-    body.no-scroll {
+    body.lightbox-open {
       overflow: hidden;
     }
 
@@ -92,10 +63,9 @@
       font: inherit;
     }
 
-    a:focus-visible,
     button:focus-visible,
-    .gallery-item:focus-visible {
-      outline: 2px solid var(--ink);
+    a:focus-visible {
+      outline: 2px solid var(--accent);
       outline-offset: 4px;
     }
 
@@ -130,17 +100,13 @@
       border-radius: 50%;
       display: grid;
       place-items: center;
-    }
-
-    .brand-mark svg {
-      width: 20px;
-      height: 20px;
+      font-size: 20px;
     }
 
     nav {
       display: flex;
       gap: clamp(16px, 3vw, 42px);
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: .16em;
       text-transform: uppercase;
     }
@@ -167,7 +133,7 @@
       align-items: center;
       gap: 16px;
       color: var(--muted);
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: .22em;
       text-transform: uppercase;
     }
@@ -193,7 +159,7 @@
     }
 
     h1 em {
-      color: #6f6353;
+      color: #827563;
       font-weight: 400;
     }
 
@@ -211,7 +177,7 @@
       margin-top: 26px;
       padding: 16px 20px;
       border: 1px solid var(--ink);
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: .15em;
       text-transform: uppercase;
       transition: background .25s, color .25s;
@@ -234,7 +200,6 @@
       padding: 0 16px 20px 0;
     }
 
-    /* Foto de abertura: preserva a imagem completa. */
     .hero-photo {
       display: block;
       width: 100%;
@@ -257,7 +222,7 @@
       bottom: 35px;
       writing-mode: vertical-rl;
       color: var(--muted);
-      font-size: 10px;
+      font-size: 9px;
       letter-spacing: .2em;
       text-transform: uppercase;
     }
@@ -313,7 +278,6 @@
       cursor: zoom-in;
     }
 
-    /* Galeria: altura automática, sem cortes ou proporção forçada. */
     .gallery-item img {
       display: block;
       width: 100%;
@@ -334,15 +298,9 @@
       gap: 10px;
       padding-top: 13px;
       color: var(--muted);
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: .12em;
       text-transform: uppercase;
-    }
-
-    .gallery-empty {
-      grid-column: 1 / -1;
-      color: var(--muted);
-      font-size: 14px;
     }
 
     .about {
@@ -362,11 +320,7 @@
       background:
         linear-gradient(135deg, transparent 49.8%, #e7e2d9 50%, transparent 50.2%);
       color: var(--accent);
-    }
-
-    .about-mark svg {
-      width: 64px;
-      height: 64px;
+      font-size: 64px;
     }
 
     .about h2 {
@@ -391,7 +345,7 @@
       padding-block: 28px;
       border-top: 1px solid var(--line);
       color: var(--muted);
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: .1em;
     }
 
@@ -418,16 +372,20 @@
       transition-delay: .45s;
     }
 
+    /* Visualização ampliada */
     .lightbox {
       position: fixed;
-      z-index: 10;
+      z-index: 1000;
       inset: 0;
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 24px;
-      background: rgba(20, 20, 19, .94);
+      padding: 60px 70px;
+      background: rgba(20, 20, 19, .96);
       cursor: zoom-out;
+      touch-action: pan-y;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .lightbox.open {
@@ -437,56 +395,76 @@
     .lightbox img {
       display: block;
       max-width: 94vw;
-      max-height: 88vh;
+      max-height: 86vh;
       width: auto;
       height: auto;
       object-fit: contain;
+      cursor: default;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
     }
 
-    .lb-btn {
+    .lightbox button {
       position: absolute;
+      display: grid;
+      place-items: center;
       color: white;
       border: 0;
-      background: transparent;
-      font-size: 36px;
-      line-height: 1;
+      background: rgba(255, 255, 255, .08);
       cursor: pointer;
-      padding: 10px 16px;
+      z-index: 2;
     }
 
-    .lb-btn:focus-visible {
-      outline-color: white;
-    }
-
-    .lb-close {
-      top: 14px;
-      right: 18px;
+    .lightbox-close {
+      top: 18px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
       font-size: 32px;
     }
 
-    .lb-prev,
-    .lb-next {
+    .lightbox-prev,
+    .lightbox-next {
       top: 50%;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      font-size: 30px;
       transform: translateY(-50%);
+      transition: background .2s;
     }
 
-    .lb-prev {
-      left: 8px;
+    .lightbox-prev {
+      left: 18px;
     }
 
-    .lb-next {
-      right: 8px;
+    .lightbox-next {
+      right: 18px;
     }
 
-    .lb-btn[hidden] {
-      display: none;
+    .lightbox button:hover {
+      background: rgba(255, 255, 255, .22);
     }
 
-    noscript .noscript-msg {
-      display: block;
-      padding: 24px 0;
-      color: var(--muted);
-      font-size: 14px;
+    .lightbox-counter {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255, 255, 255, .75);
+      font-size: 11px;
+      letter-spacing: .15em;
+    }
+
+    .lightbox-caption {
+      position: absolute;
+      bottom: 20px;
+      left: 24px;
+      max-width: 35%;
+      color: rgba(255, 255, 255, .65);
+      font-size: 11px;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -514,7 +492,7 @@
       }
 
       .brand {
-        font-size: 11px;
+        font-size: 10px;
       }
 
       .brand-mark {
@@ -526,7 +504,7 @@
         width: 100%;
         justify-content: space-between;
         gap: 12px;
-        font-size: 11px;
+        font-size: 9px;
       }
 
       .hero {
@@ -592,15 +570,44 @@
         min-height: 230px;
       }
 
-      .lb-prev,
-      .lb-next {
-        font-size: 30px;
-        padding: 10px 10px;
-      }
-
       footer {
         flex-direction: column;
         line-height: 1.8;
+      }
+
+      .lightbox {
+        padding: 55px 12px;
+      }
+
+      .lightbox img {
+        max-width: 96vw;
+        max-height: 78vh;
+      }
+
+      .lightbox-prev,
+      .lightbox-next {
+        top: auto;
+        bottom: 12px;
+        width: 44px;
+        height: 44px;
+        transform: none;
+        background: rgba(255, 255, 255, .14);
+      }
+
+      .lightbox-prev {
+        left: 20px;
+      }
+
+      .lightbox-next {
+        right: 20px;
+      }
+
+      .lightbox-counter {
+        bottom: 27px;
+      }
+
+      .lightbox-caption {
+        display: none;
       }
     }
   </style>
@@ -609,9 +616,7 @@
 <body>
   <header class="wrap">
     <a class="brand" href="#inicio" aria-label="Página inicial">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4.5" fill="currentColor"/></svg>
-      </span>
+      <span class="brand-mark">◉</span>
       <span>Fotografia de Rua</span>
     </a>
 
@@ -638,7 +643,7 @@
         </p>
 
         <a class="cta reveal delay-3" href="#galeria">
-          Explorar galeria <span aria-hidden="true">↓</span>
+          Explorar galeria <span>↓</span>
         </a>
       </div>
 
@@ -649,8 +654,6 @@
           src="fotos/DSC_0147.jpg"
           alt="Fotografia de rua: um instante do cotidiano"
           fetchpriority="high"
-          decoding="async"
-          referrerpolicy="no-referrer"
         >
         <span class="photo-caption">Instantes reais · Histórias únicas</span>
         <div class="visual-note">Momentos que não se repetem.</div>
@@ -670,15 +673,11 @@
         </p>
       </div>
 
-      <div class="gallery-grid" id="galleryGrid">
-        <noscript><span class="noscript-msg">Ative o JavaScript para ver a galeria.</span></noscript>
-      </div>
+      <div class="gallery-grid" id="galleryGrid"></div>
     </section>
 
     <section class="about wrap" id="sobre">
-      <div class="about-mark reveal" aria-hidden="true">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="12" cy="12" r="4.5" fill="currentColor"/></svg>
-      </div>
+      <div class="about-mark reveal" aria-hidden="true">◉</div>
 
       <div>
         <div class="eyebrow reveal">Sobre o projeto</div>
@@ -703,9 +702,10 @@
 
   <footer class="wrap" id="contato">
     <span>FOTOGRAFIA DE RUA · UM OLHAR SOBRE A VIDA REAL</span>
-    <a href="#inicio">Voltar ao início <span aria-hidden="true">↑</span></a>
+    <a href="#inicio">Voltar ao início ↑</a>
   </footer>
 
+  <!-- Visualizador de fotografias -->
   <div
     class="lightbox"
     id="lightbox"
@@ -714,41 +714,35 @@
     aria-label="Fotografia ampliada"
     aria-hidden="true"
   >
-    <button class="lb-btn lb-close" id="closeLightbox" type="button" aria-label="Fechar fotografia">×</button>
-    <button class="lb-btn lb-prev" id="prevPhoto" type="button" aria-label="Fotografia anterior">‹</button>
-    <img id="lightboxImage" alt="" decoding="async" referrerpolicy="no-referrer">
-    <button class="lb-btn lb-next" id="nextPhoto" type="button" aria-label="Próxima fotografia">›</button>
+    <button
+      class="lightbox-close"
+      id="closeLightbox"
+      aria-label="Fechar fotografia"
+      type="button"
+    >×</button>
+
+    <button
+      class="lightbox-prev"
+      id="prevLightbox"
+      aria-label="Fotografia anterior"
+      type="button"
+    >‹</button>
+
+    <img id="lightboxImage" src="" alt="">
+
+    <button
+      class="lightbox-next"
+      id="nextLightbox"
+      aria-label="Próxima fotografia"
+      type="button"
+    >›</button>
+
+    <span class="lightbox-caption" id="lightboxCaption"></span>
+    <span class="lightbox-counter" id="lightboxCounter"></span>
   </div>
 
   <script>
-    "use strict";
-
-    /* ---------- Configurações de segurança ---------- */
-    // Só aceita nomes de arquivo de imagem simples (sem pastas, sem "..", sem URLs).
-    const SAFE_NAME = /^[\p{L}\p{N}_\-. ()]{1,120}\.(?:jpe?g|png|webp|avif|gif)$/iu;
-    const MAX_PHOTOS = 60;
-    const FALLBACK_PHOTOS = ["DSC_0147.jpg", "DSC_0229.jpg", "DSC_0719.jpg"];
-
-    function cleanText(value, max) {
-      return typeof value === "string" ? value.trim().slice(0, max) : "";
-    }
-
-    function normalizePhoto(item) {
-      const raw = typeof item === "string" ? { name: item } : item;
-      if (!raw || typeof raw !== "object") return null;
-
-      const name = typeof raw.name === "string" ? raw.name.trim() : "";
-      if (!SAFE_NAME.test(name) || name.includes("..")) return null;
-
-      return {
-        name,
-        alt: cleanText(raw.alt, 200),
-        title: cleanText(raw.title, 60),
-        place: cleanText(raw.place, 60)
-      };
-    }
-
-    /* ---------- Animação de entrada ---------- */
+    // Animação dos elementos da página.
     let observer = null;
 
     if ("IntersectionObserver" in window) {
@@ -760,42 +754,136 @@
           }
         });
       }, { threshold: 0.12 });
-    }
 
-    function reveal(element) {
-      if (observer) {
+      document.querySelectorAll(".reveal").forEach((element) => {
         observer.observe(element);
-      } else {
+      });
+    } else {
+      document.querySelectorAll(".reveal").forEach((element) => {
         element.classList.add("visible");
-      }
+      });
     }
 
-    document.querySelectorAll(".reveal").forEach(reveal);
-
-    /* ---------- Lightbox ---------- */
+    // Elementos da galeria e do visualizador.
+    const galleryGrid = document.getElementById("galleryGrid");
     const lightbox = document.getElementById("lightbox");
     const lightboxImage = document.getElementById("lightboxImage");
     const closeButton = document.getElementById("closeLightbox");
-    const prevButton = document.getElementById("prevPhoto");
-    const nextButton = document.getElementById("nextPhoto");
-    const galleryGrid = document.getElementById("galleryGrid");
+    const prevButton = document.getElementById("prevLightbox");
+    const nextButton = document.getElementById("nextLightbox");
+    const lightboxCounter = document.getElementById("lightboxCounter");
+    const lightboxCaption = document.getElementById("lightboxCaption");
 
-    let currentIndex = 0;
-    let lastFocused = null;
-    let touchStartX = null;
+    let photos = [];
+    let currentPhotoIndex = 0;
+    let lastFocusedElement = null;
+    let touchStartX = 0;
+    let touchStartY = 0;
 
-    function galleryImages() {
-      return Array.from(galleryGrid.querySelectorAll(".gallery-item img"));
+    // Carrega as fotografias do arquivo galeria.json.
+    async function loadPublicGallery() {
+      const fallbackPhotos = [
+        "DSC_0147.jpg",
+        "DSC_0229.jpg",
+        "DSC_0719.jpg"
+      ];
+
+      let photoNames = fallbackPhotos;
+
+      try {
+        const response = await fetch(
+          "galeria.json?atualizacao=" + Date.now()
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+
+          if (Array.isArray(data.photos)) {
+            photoNames = data.photos
+              .map(photo =>
+                typeof photo === "string" ? photo : photo.name
+              )
+              .filter(name =>
+                typeof name === "string" &&
+                /^[a-zA-Z0-9À-ÿ _.-]+\.(jpg|jpeg|png|webp|avif)$/i.test(name)
+              );
+          }
+        }
+      } catch (error) {
+        console.warn("Usando fotografias padrão:", error);
+      }
+
+      // Evita nomes duplicados.
+      photoNames = [...new Set(photoNames)];
+
+      photos = photoNames.map((name) => ({
+        name,
+        src: "fotos/" + encodeURIComponent(name),
+        alt: "Fotografia de rua: " + name
+      }));
+
+      galleryGrid.replaceChildren();
+
+      photos.forEach((photo, index) => {
+        const figure = document.createElement("figure");
+        figure.className = "gallery-item reveal";
+
+        const img = document.createElement("img");
+        img.src = photo.src;
+        img.alt = photo.alt;
+        img.loading = "lazy";
+        img.decoding = "async";
+
+        const caption = document.createElement("figcaption");
+
+        const first = document.createElement("span");
+        first.textContent =
+          String(index + 1).padStart(2, "0") + " / Instante";
+
+        const second = document.createElement("span");
+        second.textContent = "Fotografia";
+
+        caption.append(first, second);
+        figure.append(img, caption);
+        galleryGrid.append(figure);
+
+        // Aplica animação também às fotografias criadas dinamicamente.
+        if (observer) {
+          observer.observe(figure);
+        } else {
+          figure.classList.add("visible");
+        }
+      });
     }
 
-    function showPhoto(index) {
-      const images = galleryImages();
-      if (!images.length) return;
+    loadPublicGallery();
 
-      currentIndex = (index + images.length) % images.length;
-      const image = images[currentIndex];
-      lightboxImage.src = image.src;
-      lightboxImage.alt = image.alt;
+    // Abre uma fotografia específica.
+    function openLightbox(index, sourceElement) {
+      if (!photos.length) return;
 
-      const single = images.length < 2;
-      prevButton.hidde
+      currentPhotoIndex = index;
+      lastFocusedElement = sourceElement;
+
+      updateLightbox();
+
+      lightbox.classList.add("open");
+      lightbox.setAttribute("aria-hidden", "false");
+      document.body.classList.add("lightbox-open");
+
+      closeButton.focus();
+    }
+
+    // Atualiza a fotografia exibida.
+    function updateLightbox() {
+      const photo = photos[currentPhotoIndex];
+
+      if (!photo) return;
+
+      lightboxImage.src = photo.src;
+      lightboxImage.alt = photo.alt;
+
+      lightboxCaption.textContent = photo.name;
+
+      lightboxCounter.textContent =
+        (cu
